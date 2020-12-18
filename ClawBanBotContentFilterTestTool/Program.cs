@@ -66,7 +66,16 @@ namespace ClawBanBotContentFilterTestTool
 
                     // Moderate the text
                     var screenResult = client.TextModeration.ScreenText("text/plain", stream, "eng", true, true, null, true);
-                    Console.WriteLine(JsonConvert.SerializeObject(screenResult, Formatting.Indented));
+
+                    var screenResultDeserialised = JsonConvert.SerializeObject(screenResult, Formatting.Indented);
+
+                    var sexuallyExplicitPercentage = int.Parse(screenResult.Classification.Category1.ToString()) * 100;
+                    var sexuallySuggestivePercentage = int.Parse(screenResult.Classification.Category2.ToString()) * 100;
+                    var potentiallyOffensivePercentage = int.Parse(screenResult.Classification.Category3.ToString()) * 100;
+
+                    Console.WriteLine($"Sexually Explicit/Adult Language probability: {sexuallyExplicitPercentage}%");
+                    Console.WriteLine($"Sexually Suggestive Language probability: {sexuallySuggestivePercentage}%");
+                    Console.WriteLine($"Potentially Offensive Language probability: {potentiallyOffensivePercentage}%");
                 }              
             }
 
