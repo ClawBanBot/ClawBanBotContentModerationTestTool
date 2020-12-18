@@ -53,28 +53,27 @@ namespace ClawBanBotContentFilterTestTool
             MemoryStream stream = new MemoryStream(textBytes);
 
             Console.WriteLine("Screening {0}...", inputFile);
-            // Format text
 
-            // Save the moderation results to a file.
-            using (StreamWriter outputWriter = new StreamWriter(outputFile, false))
-            {
+
+            if (stream.Length > 0)
+            {    
+                // Write results to console
                 using (client)
                 {
                     // Screen the input text: check for profanity, classify the text into three categories,
                     // do autocorrect text, and check for personally identifying information (PII)
-                    outputWriter.WriteLine("Autocorrect typos, check for matching terms, PII, and classify.");
+                    Console.WriteLine("Autocorrect typos, check for matching terms, PII, and classify.");
 
                     // Moderate the text
                     var screenResult = client.TextModeration.ScreenText("text/plain", stream, "eng", true, true, null, true);
-                    outputWriter.WriteLine(JsonConvert.SerializeObject(screenResult, Formatting.Indented));
-                }
-
-                outputWriter.Flush();
-                outputWriter.Close();
+                    Console.WriteLine(JsonConvert.SerializeObject(screenResult, Formatting.Indented));
+                }              
             }
 
-            Console.WriteLine("Results written to {0}", outputFile);
-            Console.WriteLine();
+            else
+            {
+                Console.WriteLine("Please add some text to validate in TextFile.txt");
+            }
         }
     }
 }
